@@ -43,8 +43,8 @@ static uint16_t auto_pointer_layer_timer = 0;
 #    endif // CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_THRESHOLD
 #endif     // CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
 
-#define LOWER MO(LAYER_LOWER)
-#define RAISE MO(LAYER_RAISE)
+#define LOWER LT(LAYER_LOWER, KC_BSPC)
+#define RAISE LT(LAYER_RAISE, KC_SPC)
 #define PT_Z LT(LAYER_POINTER, KC_Z)
 #define PT_Q LT(LAYER_POINTER, KC_Q)
 #define PT_SLSH LT(LAYER_POINTER, KC_SLSH)
@@ -88,8 +88,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        KC_LCTL,    PT_Q,    KC_X,    KC_M,    KC_C,    KC_V,       KC_K,    KC_P, KC_COMM,  KC_DOT, PT_SLSH, KC_LALT,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-                                  KC_LGUI, KC_BSPC,   LOWER,      RAISE,  KC_SPC,
-                                            KC_ENT, KC_BSPC,     KC_ESC
+                                   KC_LGUI,  LOWER,  KC_ENT,     KC_TAB,   RAISE,
+                                             KC_NO,   KC_NO,     KC_ESC
   //                            ╰───────────────────────────╯ ╰──────────────────╯
   ),
 
@@ -103,8 +103,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        KC_LCTL,    PT_Z,    KC_X,    KC_C,    KC_V,    KC_B,       KC_N,    KC_M, KC_COMM,  KC_DOT, PT_SLSH, KC_LALT,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-                                   KC_LGUI, KC_SPC,   LOWER,      RAISE,  KC_ENT,
-                                           KC_LALT, KC_BSPC,     KC_DEL
+                                   KC_LGUI,  LOWER,  KC_ENT,     KC_TAB,   RAISE,
+                                             KC_NO,   KC_NO,     KC_ESC
   //                            ╰───────────────────────────╯ ╰──────────────────╯
   ),
 
@@ -127,11 +127,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
         KC_F12,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,      KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10,  KC_F11,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       KC_MNXT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_VOLU,
+       KC_MNXT, KC_PGUP, KC_HOME,   KC_UP,  KC_END, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_VOLU,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       KC_MPLY, KC_LEFT,   KC_UP, KC_DOWN, KC_RGHT, XXXXXXX,    XXXXXXX, KC_RSFT, KC_RCTL, KC_RALT, KC_RGUI, KC_MUTE,
+       KC_MPLY, KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, XXXXXXX,    XXXXXXX, KC_RSFT, KC_RCTL, KC_RALT, KC_RGUI, KC_MUTE,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       KC_MPRV, KC_HOME, KC_PGUP, KC_PGDN,  KC_END, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_VOLD,
+       KC_MPRV, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_VOLD,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
                                   _______, _______, XXXXXXX,    _______, XXXXXXX,
                                            _______, _______,    XXXXXXX
