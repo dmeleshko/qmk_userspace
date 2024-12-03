@@ -176,6 +176,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 SEND_STRING(SS_DOWN(X_LCTL) SS_DOWN(X_LALT) SS_DOWN(X_LGUI) SS_LSFT("r") SS_UP(X_LCTL) SS_UP(X_LALT) SS_UP(X_LGUI));
                 default_layer_set((layer_state_t)1 << LAYER_QWERTY);
             }
+            is_russian_enabled = !is_russian_enabled;
         }
         break;
     }
