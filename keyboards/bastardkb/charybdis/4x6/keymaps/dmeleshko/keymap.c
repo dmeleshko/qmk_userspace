@@ -177,7 +177,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 default_layer_set((layer_state_t)1 << LAYER_QWERTY);
             }
         }
+        break;
     }
+    return true;
 }
 
 #ifdef POINTING_DEVICE_ENABLE
