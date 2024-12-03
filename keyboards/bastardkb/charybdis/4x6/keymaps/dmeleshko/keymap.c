@@ -183,28 +183,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
-layer_state_t layer_state_set_user(layer_state_t state) {
-    switch (get_highest_layer(state)) {
-    case LAYER_POINTER:
-        rgb_matrix_sethsv_noeeprom(HSV_CYAN);
-        break;
-    case LAYER_RAISE:
-        rgb_matrix_sethsv_noeeprom(HSV_GREEN);
-        break;
-    case LAYER_LOWER:
-        rgb_matrix_sethsv_noeeprom(HSV_WHITE);
-        break;
-    case LAYER_QWERTY:
-        rgb_matrix_sethsv_noeeprom(HSV_CORAL);
-        break;
-    default: //  for any other layers, or the default layer
-        rgb_matrix_sethsv_noeeprom(HSV_ORANGE);
-        break;
-    }
-  return state;
-}
-
-#ifdef POINTING_DEVICE_ENABLE
 #    ifdef CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
 report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
     if (abs(mouse_report.x) > CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_THRESHOLD || abs(mouse_report.y) > CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_THRESHOLD) {
@@ -231,13 +209,29 @@ void matrix_scan_user(void) {
 }
 #    endif // CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
 
-#    ifdef CHARYBDIS_AUTO_SNIPING_ON_LAYER
 layer_state_t layer_state_set_user(layer_state_t state) {
+    switch (get_highest_layer(state)) {
+    case LAYER_POINTER:
+        rgb_matrix_sethsv_noeeprom(HSV_CYAN);
+        break;
+    case LAYER_RAISE:
+        rgb_matrix_sethsv_noeeprom(HSV_GREEN);
+        break;
+    case LAYER_LOWER:
+        rgb_matrix_sethsv_noeeprom(HSV_WHITE);
+        break;
+    case LAYER_QWERTY:
+        rgb_matrix_sethsv_noeeprom(HSV_CORAL);
+        break;
+    default: //  for any other layers, or the default layer
+        rgb_matrix_sethsv_noeeprom(HSV_ORANGE);
+        break;
+    }
+#    ifdef CHARYBDIS_AUTO_SNIPING_ON_LAYER
     charybdis_set_pointer_sniping_enabled(layer_state_cmp(state, CHARYBDIS_AUTO_SNIPING_ON_LAYER));
-    return state;
-}
 #    endif // CHARYBDIS_AUTO_SNIPING_ON_LAYER
-#endif     // POINTING_DEVICE_ENABLE
+  return state;
+}
 
 #ifdef RGB_MATRIX_ENABLE
 // Forward-declare this helper function since it is defined in rgb_matrix.c.
