@@ -81,7 +81,7 @@ static uint16_t auto_pointer_layer_timer = 0;
 #    define SNIPING KC_NO
 #endif // !POINTING_DEVICE_ENABLE
 
-const enum {
+enum custom_keycodes {
     RU_TOGG = SAFE_RANGE,
 };
 
