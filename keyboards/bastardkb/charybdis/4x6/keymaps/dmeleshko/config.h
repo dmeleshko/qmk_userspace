@@ -18,7 +18,7 @@
 
 #ifdef VIA_ENABLE
 /* VIA configuration. */
-#    define DYNAMIC_KEYMAP_LAYER_COUNT 5
+#    define DYNAMIC_KEYMAP_LAYER_COUNT 7
 #endif // VIA_ENABLE
 
 #ifndef __arm__
@@ -29,6 +29,8 @@
 /* Charybdis-specific features. */
 
 #ifdef POINTING_DEVICE_ENABLE
+#    define CHARYBDIS_MINIMUM_DEFAULT_DPI 1400
+#    define CHARYBDIS_MINIMUM_SNIPING_DPI 400
 // Automatically enable the pointer layer when moving the trackball.  See also:
 // - `CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_TIMEOUT_MS`
 // - `CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_THRESHOLD`

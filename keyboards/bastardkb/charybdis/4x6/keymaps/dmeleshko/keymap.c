@@ -18,6 +18,8 @@
 #include <stdint.h>
 #include QMK_KEYBOARD_H
 
+#include "features/custom_shift_keys.h"
+
 #ifdef CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
 #    include "timer.h"
 #endif // CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
@@ -28,6 +30,8 @@ enum charybdis_keymap_layers {
     LAYER_LOWER,
     LAYER_RAISE,
     LAYER_POINTER,
+    LAYER_SYMBOLS,
+    LAYER_MACRO
 };
 
 /** \brief Automatically enable sniping-mode on the pointer layer. */
@@ -50,6 +54,8 @@ static uint16_t auto_pointer_layer_timer = 0;
 #define PT_Z LT(LAYER_POINTER, KC_Z)
 #define PT_Q LT(LAYER_POINTER, KC_Q)
 #define PT_SLSH LT(LAYER_POINTER, KC_SLSH)
+#define SYMBOLS LT(LAYER_SYMBOLS, KC_ENT)
+#define MACRO MO(LAYER_MACRO)
 
 #define DF_GRPT DF(LAYER_BASE)
 #define DF_QWRT DF(LAYER_QWERTY)
@@ -58,6 +64,11 @@ static uint16_t auto_pointer_layer_timer = 0;
 #define LC_I LCTL_T(KC_I)
 #define LC_A LCTL_T(KC_A)
 #define LC_SCLN LCTL_T(KC_SCLN)
+
+#define SYM_N LT(LAYER_SYMBOLS, KC_N)
+#define SYM_I LT(LAYER_SYMBOLS, KC_I)
+#define SYM_A LT(LAYER_SYMBOLS, KC_A)
+#define SYM_SCLN LT(LAYER_SYMBOLS, KC_SCLN)
 
 #define LA_R LALT_T(KC_R)
 #define LA_E LALT_T(KC_E)
@@ -74,6 +85,18 @@ static uint16_t auto_pointer_layer_timer = 0;
 #define LS_F LSFT_T(KC_F)
 #define LS_J LSFT_T(KC_J)
 
+#define WM_BL HYPR(KC_1)
+#define WM_B HYPR(KC_2)
+#define WM_BR HYPR(KC_3)
+#define WM_L HYPR(KC_4)
+#define WM_F HYPR(KC_5)
+#define WM_R HYPR(KC_6)
+#define WM_TL HYPR(KC_7)
+#define WM_T HYPR(KC_8)
+#define WM_TR HYPR(KC_9)
+
+#define MC_SCRN S(G(C(KC_4)))
+
 #ifndef POINTING_DEVICE_ENABLE
 #    define DRGSCRL KC_NO
 #    define DPI_MOD KC_NO
@@ -83,43 +106,54 @@ static uint16_t auto_pointer_layer_timer = 0;
 
 enum custom_keycodes {
     RU_TOGG = SAFE_RANGE,
+    MC_CDUP,
+    MC_CLEQ,
 };
+
+const custom_shift_key_t custom_shift_keys[] = {
+  {KC_QUOT, KC_UNDS}, // Shift ' is _
+  {KC_COMM, KC_QUES}, // Shift , is ?
+  {KC_MINS, KC_DQUO}, // Shift - is "
+  {PT_SLSH, KC_LT  }, // Shift / is <
+};
+uint8_t NUM_CUSTOM_SHIFT_KEYS =
+    sizeof(custom_shift_keys) / sizeof(custom_shift_key_t);
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_BASE] = LAYOUT(
   // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
-        KC_ESC,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,       KC_6,    KC_7,    KC_8,    KC_9,    KC_0, KC_MINS,
+        KC_GRV,    KC_4,    KC_3,    KC_2,    KC_1,    KC_5,       KC_9,    KC_0,    KC_6,    KC_7,    KC_8, KC_MINS,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-        KC_TAB,    KC_B,    KC_L,    KC_D,    KC_W,    KC_Z,    KC_QUOT,    KC_F,    KC_O,    KC_U,    KC_J, KC_BSLS,
+       CW_TOGG,    KC_B,    KC_L,    KC_D,    KC_W,    KC_Z,    KC_QUOT,    KC_F,    KC_O,    KC_U,    KC_J, KC_SCLN,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       KC_LSFT,    LC_N,    LA_R,    LG_T,    LS_S,    KC_G,       KC_Y,    LS_H,    LG_A,    LA_E,    LC_I, KC_SCLN,
+       KC_LSFT,   SYM_N,    LA_R,    LG_T,    LS_S,    KC_G,       KC_Y,    LS_H,    LG_A,    LA_E,   SYM_I, KC_COMM,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       KC_LCTL,    PT_Q,    KC_X,    KC_M,    KC_C,    KC_V,       KC_K,    KC_P, KC_COMM,  KC_DOT, PT_SLSH, KC_LALT,
+       KC_LCTL,    PT_Q,    KC_X,    KC_M,    KC_C,    KC_V,       KC_K,    KC_P,  KC_DOT, KC_MINS, PT_SLSH, KC_LCTL,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-                                   KC_LGUI,  LOWER,  KC_ENT,     KC_TAB,   RAISE,
-                                             KC_NO,   KC_NO,     KC_ESC
+                                    KC_NO,   LOWER,  KC_ENT,     KC_TAB,   RAISE,
+                                             MACRO,   KC_NO,     KC_ESC
   //                            ╰───────────────────────────╯ ╰──────────────────╯
   ),
 
   [LAYER_QWERTY] = LAYOUT(
   // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
-        KC_ESC,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,       KC_6,    KC_7,    KC_8,    KC_9,    KC_0, KC_MINS,
+        KC_GRV,    KC_4,    KC_3,    KC_2,    KC_1,    KC_5,       KC_9,    KC_0,    KC_6,    KC_7,    KC_8, KC_MINS,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-        KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,       KC_Y,    KC_U,    KC_I,    KC_O,    KC_P, KC_BSLS,
+       CW_TOGG,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,       KC_Y,    KC_U,    KC_I,    KC_O,    KC_P, KC_BSLS,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       KC_LSFT,    LC_A,    LA_S,    LG_D,    LS_F,    KC_G,       KC_H,    LS_J,    LG_K,    LA_L, LC_SCLN, KC_QUOT,
+       KC_LSFT,   SYM_A,    LA_S,    LG_D,    LS_F,    KC_G,       KC_H,    LS_J,    LG_K,    LA_L,SYM_SCLN, KC_QUOT,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       KC_LCTL,    PT_Z,    KC_X,    KC_C,    KC_V,    KC_B,       KC_N,    KC_M, KC_COMM,  KC_DOT, PT_SLSH, KC_LALT,
+       KC_LCTL,    PT_Z,    KC_X,    KC_C,    KC_V,    KC_B,       KC_N,    KC_M, KC_COMM,  KC_DOT, PT_SLSH, KC_LCTL,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-                                   KC_LGUI,  LOWER,  KC_ENT,     KC_TAB,   RAISE,
-                                             KC_NO,   KC_NO,     KC_ESC
+                                    KC_NO,   LOWER,  KC_ENT,     KC_TAB,   RAISE,
+                                             MACRO,   KC_NO,     KC_ESC
   //                            ╰───────────────────────────╯ ╰──────────────────╯
   ),
 
   [LAYER_LOWER] = LAYOUT(
   // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
-       KC_TILD, KC_EXLM,   KC_AT, KC_HASH,  KC_DLR, KC_PERC,    KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_UNDS,
+       KC_TILD, KC_DLR,  KC_HASH,   KC_AT, KC_EXLM, KC_PERC,    KC_LPRN, KC_RPRN, KC_CIRC, KC_AMPR, KC_ASTR, KC_UNDS,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        RGB_MOD, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    KC_LBRC,   KC_P7,   KC_P8,   KC_P9, KC_RBRC, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
@@ -134,7 +168,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [LAYER_RAISE] = LAYOUT(
   // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
-        KC_F12,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,      KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10,  KC_F11,
+        KC_F12,   KC_F4,   KC_F3,   KC_F2,   KC_F1,   KC_F5,      KC_F9,  KC_F10,   KC_F6,   KC_F7,  KC_F8,  KC_F11,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        KC_MNXT, KC_PGUP, KC_HOME,   KC_UP,  KC_END, XXXXXXX,    DF_QWRT, RU_TOGG, DF_GRPT, XXXXXXX, XXXXXXX, KC_VOLU,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
@@ -153,7 +187,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, DPI_MOD, S_D_MOD,    S_D_MOD, DPI_MOD, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       XXXXXXX, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX,    XXXXXXX, KC_RSFT, KC_RCTL, KC_RALT, KC_RGUI, XXXXXXX,
+       XXXXXXX, KC_LCTL, KC_LALT, KC_LGUI, KC_LSFT, XXXXXXX,    XXXXXXX, KC_RSFT, KC_RGUI, KC_RALT, KC_RCTL, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        XXXXXXX, _______, DRGSCRL, SNIPING, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, SNIPING, DRGSCRL, _______, XXXXXXX,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
@@ -161,11 +195,42 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                            XXXXXXX, KC_BTN2,    KC_BTN2
   //                            ╰───────────────────────────╯ ╰──────────────────╯
   ),
+
+  [LAYER_SYMBOLS] = LAYOUT(
+  // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
+       XXXXXXX,  KC_GRV,   KC_LT,   KC_GT, KC_DQUO,  KC_DOT,    KC_AMPR, MC_CLEQ, KC_LBRC, KC_RBRC, KC_PERC, XXXXXXX,
+  // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
+       XXXXXXX, KC_EXLM, KC_MINS, KC_PLUS,  KC_EQL, KC_HASH,    KC_PIPE, KC_COLN, KC_LPRN, KC_RPRN, KC_QUES, XXXXXXX,
+  // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
+       XXXXXXX, KC_CIRC, KC_SLSH, KC_ASTR, KC_BSLS, MC_CDUP,    KC_TILD,  KC_DLR, KC_LCBR, KC_RCBR,   KC_AT, XXXXXXX,
+  // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
+                                  XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX,
+                                           XXXXXXX, XXXXXXX,    XXXXXXX
+  //                            ╰───────────────────────────╯ ╰──────────────────╯
+  ),
+
+  [LAYER_MACRO] = LAYOUT(
+  // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    MC_SCRN,   WM_TL,    WM_T,   WM_TR, XXXXXXX, XXXXXXX,
+  // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX,    WM_L,    WM_F,    WM_R, XXXXXXX, XXXXXXX,
+  // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX,   WM_BL,    WM_B,   WM_BR, XXXXXXX, XXXXXXX,
+  // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
+                                  XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX,
+                                           XXXXXXX, XXXXXXX,    XXXXXXX
+  //                            ╰───────────────────────────╯ ╰──────────────────╯
+  ),
 };
 // clang-format on
 bool is_russian_enabled = false;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (!is_russian_enabled && !process_custom_shift_keys(keycode, record)) { return false; }
     switch (keycode) {
     case RU_TOGG:
         if (!record->event.pressed) {
@@ -177,6 +242,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 default_layer_set((layer_state_t)1 << LAYER_QWERTY);
             }
             is_russian_enabled = !is_russian_enabled;
+        }
+        break;
+    case MC_CDUP:
+        if (!record->event.pressed) {
+            SEND_STRING("../");
+        }
+        break;
+    case MC_CLEQ:
+        if (!record->event.pressed) {
+            SEND_STRING(":=");
         }
         break;
     }
