@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <math.h>
 #include <stdint.h>
 #include QMK_KEYBOARD_H
 
@@ -23,7 +22,7 @@
 #ifdef CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
 #    include "timer.h"
 #endif // CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
-
+a
 enum charybdis_keymap_layers {
     LAYER_BASE = 0,
     LAYER_QWERTY,
@@ -237,9 +236,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (is_russian_enabled) {
                 SEND_STRING(SS_DOWN(X_LCTL) SS_DOWN(X_LALT) SS_DOWN(X_LGUI) SS_LSFT("e") SS_UP(X_LCTL) SS_UP(X_LALT) SS_UP(X_LGUI));
                 default_layer_set((layer_state_t)1 << LAYER_BASE);
+                rgb_matrix_sethsv_noeeprom(MY_BASE_COLOR);
             } else {
                 SEND_STRING(SS_DOWN(X_LCTL) SS_DOWN(X_LALT) SS_DOWN(X_LGUI) SS_LSFT("r") SS_UP(X_LCTL) SS_UP(X_LALT) SS_UP(X_LGUI));
                 default_layer_set((layer_state_t)1 << LAYER_QWERTY);
+                rgb_matrix_sethsv_noeeprom(MY_SECONDARY_COLOR);
             }
             is_russian_enabled = !is_russian_enabled;
         }
@@ -283,6 +284,10 @@ void matrix_scan_user(void) {
     }
 }
 #    endif // CHARYBDIS_AUTO_POINTER_LAYER_TRIGGER_ENABLE
+
+void keyboard_post_init_user(void) {
+    rgb_matrix_sethsv_noeeprom(MY_BASE_COLOR);
+}
 
 layer_state_t layer_state_set_user(layer_state_t state) {
 #    ifdef CHARYBDIS_AUTO_SNIPING_ON_LAYER
