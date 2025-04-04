@@ -113,7 +113,7 @@ enum custom_keycodes {
 
 const custom_shift_key_t custom_shift_keys[] = {
   {KC_QUOT, KC_UNDS}, // Shift ' is _
-  {KC_COMM, KC_QUES}, // Shift , is ?
+  {LC_COMM, KC_QUES}, // Shift , is ?
   {KC_MINS, KC_DQUO}, // Shift - is "
   {PT_SLSH, KC_LT  }, // Shift / is <
 };
