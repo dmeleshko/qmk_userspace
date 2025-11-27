@@ -17,8 +17,6 @@
 #include <stdint.h>
 #include QMK_KEYBOARD_H
 
-#include "features/custom_shift_keys.h"
-
 enum charybdis_keymap_layers {
     LAYER_BASE = 0,
     LAYER_QWERTY,
@@ -40,6 +38,7 @@ enum charybdis_keymap_layers {
 #define PT_Z LT(LAYER_POINTER, KC_Z)
 #define PT_Q LT(LAYER_POINTER, KC_Q)
 #define PT_SLSH LT(LAYER_POINTER, KC_SLSH)
+#define MC_REP LT(LAYER_MACRO, QK_REP)
 #define MACRO MO(LAYER_MACRO)
 #define QWERTY MO(LAYER_QWERTY)
 #define BASE MO(LAYER_GRAPHITE)
@@ -53,6 +52,7 @@ enum charybdis_keymap_layers {
 #define LC_SCLN LCTL_T(KC_SCLN)
 #define LC_COMM LCTL_T(KC_COMM)
 #define LC_QUOT LCTL_T(KC_QUOT)
+#define LC_MINS LCTL_T(KC_MINS)
 
 #define TMUX C(KC_B)
 
@@ -129,15 +129,6 @@ enum custom_keycodes {
     RU_COMM,
 };
 
-const custom_shift_key_t custom_shift_keys[] = {
-  {KC_QUOT, KC_UNDS}, // Shift ' is _
-  {LC_COMM, KC_QUES}, // Shift , is ?
-  {KC_MINS, KC_DQUO}, // Shift - is "
-  {PT_SLSH, KC_LT  }, // Shift / is <
-};
-uint8_t NUM_CUSTOM_SHIFT_KEYS =
-    sizeof(custom_shift_keys) / sizeof(custom_shift_key_t);
-
 const char chordal_hold_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM =
     LAYOUT(
         'L', 'L', 'L', 'L', 'L', 'L',  'R', 'R', 'R', 'R', 'R', 'R',
@@ -152,10 +143,10 @@ const char chordal_hold_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM =
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_BASE] = LAYOUT(
        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-       CW_TOGG,    KC_B,    KC_L,    KC_D,    KC_W,    KC_Z,    KC_QUOT,    KC_F,    KC_O,    KC_U,    KC_J, KC_SCLN,
-       KC_LCTL,   SYM_N,    LA_R,    LG_T,    LS_S,    KC_G,       KC_Y,    LS_H,    LG_A,    LA_E,   SYM_I, LC_COMM,
-       KC_UNDS,    PT_Q,    KC_X,    KC_M,    KC_C,    KC_V,       KC_K,    KC_P,  KC_DOT, KC_MINS, PT_SLSH, XXXXXXX,
-                                    MACRO, LW_BSPC,  RS_ENT,     RS_TAB,  LW_SPC,
+       CW_TOGG,    KC_B,    KC_L,    KC_D,    KC_W,    KC_Z,    KC_QUOT,    KC_F,    KC_O,    KC_U,    KC_J, KC_DQUO,
+       KC_LCTL,   SYM_N,    LA_R,    LG_T,    LS_S,    KC_G,       KC_Y,    LS_H,    LG_A,    LA_E,   SYM_I, LC_MINS,
+       KC_UNDS,    PT_Q,    KC_X,    KC_M,    KC_C,    KC_V,       KC_K,    KC_P,  KC_DOT, KC_COMM, PT_SLSH, XXXXXXX,
+                                   MC_REP, LW_BSPC,  RS_ENT,     RS_TAB,  LW_SPC,
                                             QWERTY,    TMUX,     KC_ESC
   ),
 
@@ -164,16 +155,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        CW_TOGG,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,       KC_Y,    KC_U,    KC_I,    KC_O,    KC_P, KC_LBRC,
        KC_LCTL,   SYM_A,    LA_S,    LG_D,    LS_F,    KC_G,       KC_H,    LS_J,    LG_K,    LA_L,SYM_SCLN, LC_QUOT,
        KC_UNDS,    PT_Z,    KC_X,    KC_C,    KC_V,    KC_B,       KC_N,    KC_M, KC_COMM,  KC_DOT, PT_SLSH, KC_RBRC,
-                                    MACRO, LW_BSPC,  RS_ENT,     RS_TAB,  LW_SPC,
+                                   MC_REP, LW_BSPC,  RS_ENT,     RS_TAB,  LW_SPC,
                                               BASE,    TMUX,     KC_ESC
   ),
 
   [LAYER_GRAPHITE] = LAYOUT(
        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-       CW_TOGG,    KC_B,    KC_L,    KC_D,    KC_W,    KC_Z,    KC_QUOT,    KC_F,    KC_O,    KC_U,    KC_J, KC_SCLN,
-       KC_LCTL,   SYM_N,    LA_R,    LG_T,    LS_S,    KC_G,       KC_Y,    LS_H,    LG_A,    LA_E,   SYM_I, LC_COMM,
-       KC_UNDS,    PT_Q,    KC_X,    KC_M,    KC_C,    KC_V,       KC_K,    KC_P,  KC_DOT, KC_MINS, PT_SLSH, XXXXXXX,
-                                    MACRO, LW_BSPC,  RS_ENT,     RS_TAB,  LW_SPC,
+       CW_TOGG,    KC_B,    KC_L,    KC_D,    KC_W,    KC_Z,    KC_QUOT,    KC_F,    KC_O,    KC_U,    KC_J, KC_DQUO,
+       KC_LCTL,   SYM_N,    LA_R,    LG_T,    LS_S,    KC_G,       KC_Y,    LS_H,    LG_A,    LA_E,   SYM_I, LC_MINS,
+       KC_UNDS,    PT_Q,    KC_X,    KC_M,    KC_C,    KC_V,       KC_K,    KC_P,  KC_DOT, KC_COMM, PT_SLSH, XXXXXXX,
+                                   MC_REP, LW_BSPC,  RS_ENT,     RS_TAB,  LW_SPC,
                                             QWERTY,    TMUX,     KC_ESC
   ),
 
@@ -352,3 +343,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     return true;
 }
+
+const uint16_t PROGMEM semicolon_combo[] = {KC_DOT, KC_COMM, COMBO_END};
+combo_t key_combos[] = {
+    COMBO(semicolon_combo, KC_SCLN),
+};
+
