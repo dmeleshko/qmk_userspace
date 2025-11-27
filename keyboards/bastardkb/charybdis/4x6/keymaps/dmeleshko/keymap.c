@@ -236,7 +236,7 @@ void set_english_layer(void) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    if (!is_russian_enabled && !process_custom_shift_keys(keycode, record)) { return false; }
+    if (!is_russian_enabled) { return false; }
     switch (keycode) {
     case RU_TOGG:
         if (!record->event.pressed) {
