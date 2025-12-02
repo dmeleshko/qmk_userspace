@@ -24,6 +24,7 @@ enum charybdis_keymap_layers {
     LAYER_LOWER,
     LAYER_RAISE,
     LAYER_POINTER,
+    LAYER_NUMBERS,
     LAYER_SYMBOLS,
     LAYER_SYMBOLS_RU,
     LAYER_MACRO
@@ -61,6 +62,8 @@ enum charybdis_keymap_layers {
 #define SYM_A LT(LAYER_SYMBOLS_RU, KC_A)
 #define SYM_SCLN LT(LAYER_SYMBOLS_RU, KC_SCLN)
 
+#define NUM_H LT(LAYER_NUMBERS, KC_H)
+
 #define LA_R LALT_T(KC_R)
 #define LA_E LALT_T(KC_E)
 #define LA_S LALT_T(KC_S)
@@ -70,11 +73,15 @@ enum charybdis_keymap_layers {
 #define LG_A LGUI_T(KC_A)
 #define LG_D LGUI_T(KC_D)
 #define LG_K LGUI_T(KC_K)
+#define LG_P LGUI_T(KC_P)
+#define LG_C LGUI_T(KC_C)
 
 #define LS_S LSFT_T(KC_S)
 #define LS_H LSFT_T(KC_H)
 #define LS_F LSFT_T(KC_F)
 #define LS_J LSFT_T(KC_J)
+#define LS_A LSFT_T(KC_A)
+#define LS_T LSFT_T(KC_T)
 
 #define WM_BL C(S(G(KC_LEFT)))
 #define WM_B A(G(KC_DOWN))
@@ -144,8 +151,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_BASE] = LAYOUT(
        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
        CW_TOGG,    KC_B,    KC_L,    KC_D,    KC_W,    KC_Z,    KC_QUOT,    KC_F,    KC_O,    KC_U,    KC_J, KC_DQUO,
-       KC_LCTL,   SYM_N,    LA_R,    LG_T,    LS_S,    KC_G,       KC_Y,    LS_H,    LG_A,    LA_E,   SYM_I, LC_MINS,
-       KC_UNDS,    PT_Q,    KC_X,    KC_M,    KC_C,    KC_V,       KC_K,    KC_P,  KC_DOT, KC_COMM, PT_SLSH, XXXXXXX,
+       KC_LCTL,   SYM_N,    LA_R,    LS_T,    KC_S,    KC_G,       KC_Y,   NUM_H,    LS_A,    LA_E,   SYM_I, LC_MINS,
+       KC_UNDS,    PT_Q,    KC_X,    KC_M,    LG_C,    KC_V,       KC_K,    LG_P,  KC_DOT, KC_COMM, PT_SLSH, XXXXXXX,
                                    MC_REP, LW_BSPC,  RS_ENT,     RS_TAB,  LW_SPC,
                                             QWERTY,    TMUX,     KC_ESC
   ),
@@ -174,6 +181,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         RU_DOT, KC_LCTL, KC_LALT, KC_LGUI, KC_LSFT,  KC_F11,     KC_F12, KC_RSFT, KC_RGUI, KC_RALT, KC_RCTL,  RU_DOT,
        KC_UNDS,   KC_F4,   KC_F3,   KC_F2,   KC_F1,   KC_F5,      KC_F9,  KC_F10,   KC_F6,   KC_F7,   KC_F8, KC_UNDS,
                                   XXXXXXX, _______, _______,    _______, _______,
+                                           XXXXXXX,    TMUX,    XXXXXXX
+  ),
+
+  [LAYER_NUMBERS] = LAYOUT(
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+       XXXXXXX, XXXXXXX,    KC_9,    KC_8,    KC_7, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+       XXXXXXX,  RU_DOT,    KC_3,    KC_2,    KC_1,    KC_0,    XXXXXXX, XXXXXXX, KC_RSFT, KC_RALT, KC_RCTL, XXXXXXX,
+       XXXXXXX, KC_COMM,    KC_6,    KC_5,    KC_4, XXXXXXX,    XXXXXXX, KC_RGUI, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+                                  XXXXXXX, _______, XXXXXXX,    _______, _______,
                                            XXXXXXX,    TMUX,    XXXXXXX
   ),
 
@@ -236,7 +252,6 @@ void set_english_layer(void) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    if (!is_russian_enabled && !process_custom_shift_keys(keycode, record)) { return false; }
     switch (keycode) {
     case RU_TOGG:
         if (!record->event.pressed) {
