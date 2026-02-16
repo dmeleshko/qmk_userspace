@@ -21,41 +21,23 @@ enum charybdis_keymap_layers {
     LAYER_BASE = 0,
     LAYER_QWERTY,
     LAYER_GRAPHITE,
-    LAYER_LOWER,
-    LAYER_RAISE,
     LAYER_POINTER,
     LAYER_NUMBERS,
+    LAYER_NAVIGATION,
     LAYER_SYMBOLS,
     LAYER_SYMBOLS_RU,
-    LAYER_MACRO
+    LAYER_EXTRA
 };
 
-#define LOWER LT(LAYER_LOWER, KC_BSPC)
-#define RAISE LT(LAYER_RAISE, KC_SPC)
-#define LW_BSPC LT(LAYER_LOWER, KC_BSPC)
-#define LW_SPC LT(LAYER_LOWER, KC_SPC)
-#define RS_ENT LT(LAYER_RAISE, KC_ENT)
-#define RS_TAB LT(LAYER_RAISE, KC_TAB)
-#define PT_Z LT(LAYER_POINTER, KC_Z)
-#define PT_Q LT(LAYER_POINTER, KC_Q)
-#define PT_SLSH LT(LAYER_POINTER, KC_SLSH)
-#define MC_REP LT(LAYER_MACRO, QK_REP)
-#define MACRO MO(LAYER_MACRO)
+#define PT_MINS LT(LAYER_POINTER, KC_MINS)
+#define PT_QUOT LT(LAYER_POINTER, KC_QUOT)
 #define QWERTY MO(LAYER_QWERTY)
 #define BASE MO(LAYER_GRAPHITE)
+#define POINTER MO(LAYER_POINTER)
+#define EXTRA MO(LAYER_EXTRA)
 
 #define DF_GRPT DF(LAYER_BASE)
 #define DF_QWRT DF(LAYER_QWERTY)
-
-#define LC_N LCTL_T(KC_N)
-#define LC_I LCTL_T(KC_I)
-#define LC_A LCTL_T(KC_A)
-#define LC_SCLN LCTL_T(KC_SCLN)
-#define LC_COMM LCTL_T(KC_COMM)
-#define LC_QUOT LCTL_T(KC_QUOT)
-#define LC_MINS LCTL_T(KC_MINS)
-
-#define TMUX C(KC_B)
 
 #define SYM_N LT(LAYER_SYMBOLS, KC_N)
 #define SYM_I LT(LAYER_SYMBOLS, KC_I)
@@ -63,25 +45,29 @@ enum charybdis_keymap_layers {
 #define SYM_SCLN LT(LAYER_SYMBOLS_RU, KC_SCLN)
 
 #define NUM_H LT(LAYER_NUMBERS, KC_H)
+#define NUM_J LT(LAYER_NUMBERS, KC_J)
+
+#define NAV_S LT(LAYER_NAVIGATION, KC_S)
+#define NAV_F LT(LAYER_NAVIGATION, KC_F)
+
+#define LC_Q LCTL_T(KC_Q)
+#define LC_SLSH LCTL_T(KC_SLSH)
+#define LC_Z LCTL_T(KC_Z)
 
 #define LA_R LALT_T(KC_R)
 #define LA_E LALT_T(KC_E)
 #define LA_S LALT_T(KC_S)
 #define LA_L LALT_T(KC_L)
 
-#define LG_T LGUI_T(KC_T)
-#define LG_A LGUI_T(KC_A)
-#define LG_D LGUI_T(KC_D)
-#define LG_K LGUI_T(KC_K)
 #define LG_P LGUI_T(KC_P)
 #define LG_C LGUI_T(KC_C)
+#define LG_M LGUI_T(KC_M)
+#define LG_V LGUI_T(KC_V)
 
-#define LS_S LSFT_T(KC_S)
-#define LS_H LSFT_T(KC_H)
-#define LS_F LSFT_T(KC_F)
-#define LS_J LSFT_T(KC_J)
 #define LS_A LSFT_T(KC_A)
 #define LS_T LSFT_T(KC_T)
+#define LS_D LSFT_T(KC_D)
+#define LS_K LSFT_T(KC_K)
 
 #define WM_BL C(S(G(KC_LEFT)))
 #define WM_B A(G(KC_DOWN))
@@ -108,6 +94,7 @@ enum charybdis_keymap_layers {
 #define MC_COPY G(KC_C)
 #define MC_PASTE G(KC_V)
 #define MC_LOCK G(C(KC_Q))
+#define MC_RFSH G(KC_R)
 
 #ifndef POINTING_DEVICE_ENABLE
 #    define DRGSCRL KC_NO
@@ -151,37 +138,28 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_BASE] = LAYOUT(
        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
        CW_TOGG,    KC_B,    KC_L,    KC_D,    KC_W,    KC_Z,    KC_QUOT,    KC_F,    KC_O,    KC_U,    KC_J, KC_DQUO,
-       KC_LCTL,   SYM_N,    LA_R,    LS_T,    KC_S,    KC_G,       KC_Y,   NUM_H,    LS_A,    LA_E,   SYM_I, LC_MINS,
-       KC_UNDS,    PT_Q,    KC_X,    KC_M,    LG_C,    KC_V,       KC_K,    LG_P,  KC_DOT, KC_COMM, PT_SLSH, XXXXXXX,
-                                   MC_REP, LW_BSPC,  RS_ENT,     RS_TAB,  LW_SPC,
-                                            QWERTY,    TMUX,     KC_ESC
+       POINTER,   SYM_N,    LA_R,    LS_T,   NAV_S,    KC_G,       KC_Y,   NUM_H,    LS_A,    LA_E,   SYM_I, PT_MINS,
+         EXTRA,    LC_Q,    KC_X,    KC_M,    LG_C,    KC_V,       KC_K,    LG_P,  KC_DOT, KC_COMM, LC_SLSH,   EXTRA,
+                                  KC_LSFT, KC_BSPC,  KC_ENT,     KC_TAB,  KC_SPC,
+                                            QWERTY, XXXXXXX,     KC_ESC
   ),
 
   [LAYER_QWERTY] = LAYOUT(
        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
        CW_TOGG,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,       KC_Y,    KC_U,    KC_I,    KC_O,    KC_P, KC_LBRC,
-       KC_LCTL,   SYM_A,    LA_S,    LG_D,    LS_F,    KC_G,       KC_H,    LS_J,    LG_K,    LA_L,SYM_SCLN, LC_QUOT,
-       KC_UNDS,    PT_Z,    KC_X,    KC_C,    KC_V,    KC_B,       KC_N,    KC_M, KC_COMM,  KC_DOT, PT_SLSH, KC_RBRC,
-                                   MC_REP, LW_BSPC,  RS_ENT,     RS_TAB,  LW_SPC,
-                                              BASE,    TMUX,     KC_ESC
+       POINTER,   SYM_A,    LA_S,    LS_D,   NAV_F,    KC_G,       KC_H,   NUM_J,    LS_K,    LA_L,SYM_SCLN, PT_QUOT,
+         EXTRA,    LC_Z,    KC_X,    KC_C,    LG_V,    KC_B,       KC_N,    LG_M, KC_COMM,  KC_DOT, LC_SLSH, KC_RBRC,
+                                  KC_LSFT, KC_BSPC,  KC_ENT,     KC_TAB,  KC_SPC,
+                                              BASE, XXXXXXX,     KC_ESC
   ),
 
   [LAYER_GRAPHITE] = LAYOUT(
        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
        CW_TOGG,    KC_B,    KC_L,    KC_D,    KC_W,    KC_Z,    KC_QUOT,    KC_F,    KC_O,    KC_U,    KC_J, KC_DQUO,
-       KC_LCTL,   SYM_N,    LA_R,    LG_T,    LS_S,    KC_G,       KC_Y,    LS_H,    LG_A,    LA_E,   SYM_I, LC_MINS,
-       KC_UNDS,    PT_Q,    KC_X,    KC_M,    KC_C,    KC_V,       KC_K,    KC_P,  KC_DOT, KC_COMM, PT_SLSH, XXXXXXX,
-                                   MC_REP, LW_BSPC,  RS_ENT,     RS_TAB,  LW_SPC,
-                                            QWERTY,    TMUX,     KC_ESC
-  ),
-
-  [LAYER_LOWER] = LAYOUT(
-       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-       RU_COMM,    KC_4,    KC_3,    KC_2,    KC_1,    KC_5,       KC_9,    KC_0,    KC_6,    KC_7,    KC_8, RU_COMM,
-        RU_DOT, KC_LCTL, KC_LALT, KC_LGUI, KC_LSFT,  KC_F11,     KC_F12, KC_RSFT, KC_RGUI, KC_RALT, KC_RCTL,  RU_DOT,
-       KC_UNDS,   KC_F4,   KC_F3,   KC_F2,   KC_F1,   KC_F5,      KC_F9,  KC_F10,   KC_F6,   KC_F7,   KC_F8, KC_UNDS,
-                                  XXXXXXX, _______, _______,    _______, _______,
-                                           XXXXXXX,    TMUX,    XXXXXXX
+       POINTER,   SYM_N,    LA_R,    LS_T,   NAV_S,    KC_G,       KC_Y,   NUM_H,    LS_A,    LA_E,   SYM_I, PT_MINS,
+         EXTRA,    LC_Q,    KC_X,    KC_M,    LG_C,    KC_V,       KC_K,    LG_P,  KC_DOT, KC_COMM, LC_SLSH,   EXTRA,
+                                  KC_LSFT, KC_BSPC,  KC_ENT,     KC_TAB,  KC_SPC,
+                                            QWERTY, XXXXXXX,     KC_ESC
   ),
 
   [LAYER_NUMBERS] = LAYOUT(
@@ -190,23 +168,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        XXXXXXX,  RU_DOT,    KC_3,    KC_2,    KC_1,    KC_0,    XXXXXXX, XXXXXXX, KC_RSFT, KC_RALT, KC_RCTL, XXXXXXX,
        XXXXXXX, KC_COMM,    KC_6,    KC_5,    KC_4, XXXXXXX,    XXXXXXX, KC_RGUI, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
                                   XXXXXXX, _______, XXXXXXX,    _______, _______,
-                                           XXXXXXX,    TMUX,    XXXXXXX
+                                           XXXXXXX, XXXXXXX,    QK_LLCK
   ),
 
-  [LAYER_RAISE] = LAYOUT(
-      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-       KC_MNXT, KC_PGUP, KC_HOME,   KC_UP,  KC_END, KC_VOLU,    DF_QWRT, RU_TOGG, DF_GRPT, XXXXXXX, CG_TOGG, XXXXXXX,
-       KC_MPLY, KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, KC_MUTE,    XXXXXXX, KC_RSFT, KC_RGUI, KC_RALT, KC_RCTL, XXXXXXX,
-       KC_MPRV, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_VOLD,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-                                  _______, _______, XXXXXXX,    _______, XXXXXXX,
-                                           _______,    TMUX,    XXXXXXX
+  [LAYER_NAVIGATION] = LAYOUT(
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+       XXXXXXX, MC_RFSH, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    KC_PGUP, KC_HOME,   KC_UP,  KC_END, KC_VOLU, KC_MNXT,
+       XXXXXXX, XXXXXXX, KC_LALT, KC_LSFT, XXXXXXX, XXXXXXX,    KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, KC_VOLD, KC_MPRV,
+       XXXXXXX, KC_LCTL, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_MUTE, KC_MPLY,
+                                  XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX,
+                                           XXXXXXX, XXXXXXX,    QK_LLCK
   ),
 
   [LAYER_POINTER] = LAYOUT(
        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, DPI_MOD, S_D_MOD,    S_D_MOD, DPI_MOD, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
        XXXXXXX, KC_LCTL, KC_LALT, KC_LGUI, KC_LSFT, XXXXXXX,    XXXXXXX, KC_RSFT, KC_RGUI, KC_RALT, KC_RCTL, XXXXXXX,
-       XXXXXXX, _______, DRGSCRL, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, DRGSCRL, _______, XXXXXXX,
+       DRGSCRL, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, DRGSCRL,
                                   KC_BTN2, KC_BTN1, KC_BTN3,    KC_BTN3, KC_BTN1,
                                            XXXXXXX, KC_BTN2,    KC_BTN2
   ),
@@ -217,7 +195,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        XXXXXXX, KC_EXLM, KC_MINS, KC_PLUS,  KC_EQL, KC_HASH,    KC_PIPE, KC_COLN, KC_LPRN, KC_RPRN, KC_QUES, XXXXXXX,
        XXXXXXX, KC_CIRC, KC_SLSH, KC_ASTR, KC_BSLS, MC_CDUP,    KC_TILD,  KC_DLR, KC_LCBR, KC_RCBR,   KC_AT, XXXXXXX,
                                   XXXXXXX, KC_BSPC,  KC_ENT,     KC_TAB,  KC_SPC,
-                                           XXXXXXX,    TMUX,    XXXXXXX
+                                           XXXXXXX, XXXXXXX,    QK_LLCK
   ),
 
   [LAYER_SYMBOLS_RU] = LAYOUT(
@@ -226,16 +204,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        XXXXXXX, KC_EXLM, KC_MINS, KC_PLUS,  KC_EQL, KC_HASH,    RU_PIPE, KC_CIRC, KC_LPRN, KC_RPRN, KC_AMPR, XXXXXXX,
        XXXXXXX, RU_CIRC, KC_PIPE, KC_ASTR, KC_BSLS, MC_CDUP,    RU_TILD,  RU_DLR, RU_LCBR, RU_RCBR,   RU_AT, XXXXXXX,
                                   XXXXXXX, KC_BSPC,  KC_ENT,     KC_TAB,  KC_SPC,
-                                           XXXXXXX,    TMUX,    XXXXXXX
+                                           XXXXXXX, XXXXXXX,    QK_LLCK
   ),
 
-  [LAYER_MACRO] = LAYOUT(
+  [LAYER_EXTRA] = LAYOUT(
        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-       XXXXXXX, MC_LOCK, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX,   WM_TL,    WM_T,   WM_TR, MC_RCRD, XXXXXXX,
-       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    WM_NDIS,    WM_L,    WM_F,    WM_R, MC_SCRN, XXXXXXX,
-       XXXXXXX, MC_UNDO, MC_CUT, MC_COPY, MC_PASTE, MC_REDO,    XXXXXXX,   WM_BL,    WM_B,   WM_BR, XXXXXXX, XXXXXXX,
+       XXXXXXX, MC_LOCK, XXXXXXX, XXXXXXX, XXXXXXX, MC_RCRD,    DF_QWRT, RU_TOGG, DF_GRPT, XXXXXXX, CG_TOGG, XXXXXXX,
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, MC_SCRN,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+       XXXXXXX, XXXXXXX,MC_PASTE, XXXXXXX, MC_COPY,  MC_CUT,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
                                   XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX,
-                                           XXXXXXX, XXXXXXX,    XXXXXXX
+                                           XXXXXXX, XXXXXXX,    QK_LLCK
   ),
 };
 // clang-format on
@@ -363,4 +341,3 @@ const uint16_t PROGMEM semicolon_combo[] = {KC_DOT, KC_COMM, COMBO_END};
 combo_t key_combos[] = {
     COMBO(semicolon_combo, KC_SCLN),
 };
-
